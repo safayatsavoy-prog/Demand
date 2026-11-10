@@ -1,36 +1,41 @@
-}
-
-function downloadImage(orderId) {
-  const o = Store.getOrderById(orderId); if(!o) return;
-  if(typeof html2canvas === 'undefined') return toast('ইন্টারনেট চালু করে আবার চেষ্টা করুন', 'err');
-  toast('ছবি তৈরি হচ্ছে, দয়া করে অপেক্ষা করুন...');
-
-  const area = $('#image-render-area');
-  area.innerHTML = `<div class="invoice-preview" style="width:100%;">${generateOrderHTML(o)}</div>`;
-
-  html2canvas(area, { scale: 2, backgroundColor:'#ffffff' }).then(canvas => {
-    canvas.toBlob((blob) => {
-      area.innerHTML = '';
-      if(!blob) return toast('ছবি তৈরি করা সম্ভব হয়নি', 'err');
-      const url = URL.createObjectURL(blob);
-      const win = window.open();
-      if(win) {
-        win.document.write(`<body style="margin:0; display:flex; justify-content:center; background:#333;"><img src="${url}" style="max-width:100%; height:auto;" /></body>`);
-        toast('নতুন ট্যাবে ছবি ওপেন হয়েছে, সেখানে চাপ দিয়ে ধরে "Save Image" করুন।', 'ok');
-      } else {
-        const a = document.createElement('a');
-        a.href = url; a.download = (o.invoiceNo || 'order') + '.png';
-        document.body.appendChild(a); a.click(); a.remove();
-        toast('ছবি ডাউনলোড হয়েছে', 'ok');
-      }
-    }, 'image/png');
-  }).catch(err => {
-    toast('ছবি তৈরি করতে সমস্যা হয়েছে', 'err');
-    area.innerHTML = '';
-  });
-}
-
-window.addEventListener('DOMContentLoaded', () => { boot(); });
-</script>
-</body>
-</html>
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="theme-color" content="#2563eb" />
+<title>Dealer Order Management</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  :root{
+    --blue:#2563eb; --blue-dark:#1d4ed8; --blue-light:#dbeafe;
+    --green:#16a34a; --green-light:#dcfce7;
+    --red:#dc2626; --red-light:#fee2e2;
+    --grey:#f1f5f9; --grey-2:#e2e8f0; --text:#0f172a; --muted:#64748b;
+    --border:#cbd5e1;
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  html,body{margin:0;padding:0;height:100%;}
+  body{
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans Bengali", sans-serif;
+    background: var(--grey); color: var(--text); font-size: 14px; line-height:1.4;
+    -webkit-font-smoothing: antialiased; overflow-x: hidden;
+  }
+  button, input, select, textarea { font-family: inherit; font-size: inherit; color: inherit; }
+  button{ cursor:pointer; border:none; background:none; }
+  input,select,textarea{
+    width:100%; padding:10px 12px; border:1px solid var(--border); border-radius:8px;
+    background:#fff; outline:none; transition:border .15s;
+  }
+  input:focus, select:focus, textarea:focus{ border-color: var(--blue); }
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:6px;
+    padding:10px 16px; border-radius:8px; font-weight:600; font-size:14px;
+    transition: transform .1s, opacity .15s;
+  }
+  .btn:active{ transform: scale(.97); }
+  .btn-primary{ background: var(--blue); color:#fff; }
+  .btn-success{ background: var(--green); color:#fff; }
+  .btn-danger{ background: var(--red); color:#fff; }
+  .btn-outline{ background:#fff; color: var(--blue); border:1px solid var(--blue); }
