@@ -14,6 +14,7 @@
     --red:#dc2626; --red-light:#fee2e2;
     --grey:#f1f5f9; --grey-2:#e2e8f0; --text:#0f172a; --muted:#64748b;
     --border:#cbd5e1;
+    --safe-top: env(safe-area-inset-top, 35px);
     --safe-bottom: env(safe-area-inset-bottom, 0px);
   }
   html,body{margin:0;padding:0;height:100%;}
@@ -61,7 +62,7 @@
   .tag-value{ background:#ede9fe; color:#5b21b6; }
   .tag-emergency{ background:#fee2e2; color:#991b1b; }
 
-  #app{ display:flex; flex-direction:column; min-height:100vh; }
+  #app{ display:flex; flex-direction:column; min-height:100vh; padding-top: var(--safe-top); }
   .app-header{
     background:#fff; border-bottom:1px solid var(--grey-2); padding:12px 16px;
     display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:30;
@@ -107,7 +108,7 @@
   .dash-card.green{ border-left-color: var(--green); }
   .dash-card.amber{ border-left-color:#f59e0b; }
 
-  .order-screen{ display:flex; flex-direction:column; height: 100dvh; position: fixed; top:0; left:0; right:0; z-index:50; background: var(--grey); }
+  .order-screen{ display:flex; flex-direction:column; height: 100dvh; position: fixed; top:0; left:0; right:0; z-index:50; background: var(--grey); padding-top: var(--safe-top); }
   .order-toolbar{ padding:8px 12px; background:#fff; border-bottom:1px solid var(--grey-2); flex-shrink: 0; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
   .order-scroll{ flex:1; overflow-y:auto; overflow-x:hidden; padding: 0 0 8px; -webkit-overflow-scrolling: touch; }
   .prod-header{
@@ -163,7 +164,7 @@
   .result-stats .rs.ok b{ color: var(--green); }
   .result-stats .rs.wait b{ color:#b45309; }
 
-  .modal-overlay{ position:fixed; inset:0; background: rgba(15,23,42,.7); display:flex; align-items:center; justify-content:center; z-index:1000; animation: fadeIn .15s; padding: 10px; }
+  .modal-overlay{ position:fixed; inset:0; background: rgba(15,23,42,.7); display:flex; align-items:center; justify-content:center; z-index:1000; animation: fadeIn .15s; padding: 10px; padding-top: var(--safe-top); }
   @keyframes fadeIn{ from{ opacity:0; } to{ opacity:1; } }
   .modal{
     background:#fff; width:100%; max-width:600px; max-height:90vh;
@@ -831,7 +832,7 @@ function openAdminOrderEdit(orderId) {
 }
 
 function viewAdminReports() {
-  return `<h2>All Orders</h2><div>${Store.getOrders().map(o=>`
+  return `h2>All Orders</h2><div>${Store.getOrders().map(o=>`
     <div class="list-item"><div class="row1"><div><div class="title">${escapeHtml(o.dealerName)}</div><div class="meta small">${o.invoiceNo}</div></div>
     <button type="button" class="icon-btn primary" data-view="${o.id}">${Ico.eye}</button></div></div>`).join('')}</div>`;
 }
