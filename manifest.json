@@ -1,0 +1,12 @@
+{
+  "background_color": "#ffffff",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "Demand Management",
+  "orientation": "any",
+  "scope": "/",
+  "short_name": "Demand",
+  "start_url": "/",
+  "theme_color": "#2563eb",
+  "id": "App"
+}
